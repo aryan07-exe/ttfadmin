@@ -4,11 +4,11 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const app = express();
-app.use(express.json());
+
 const allowedOrigins = [
   "http://localhost:3000",   // React local
   "http://localhost:5173",   // Vite local (if needed)
-  "https://www.ttfholidays.in/",  // Production
+  "https://www.ttfholidays.in",  // Production
   "https://admin.yourdomain.com" // Admin Panel
 ];
 
@@ -24,6 +24,8 @@ app.use(cors({
   },
   credentials: true
 }));
+
+app.use(express.json());
 // Routes
 const itineraryRoutes = require("./routes/itineraryRoutes");
 app.use("/api/itineraries", itineraryRoutes);
