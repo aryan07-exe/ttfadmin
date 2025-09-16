@@ -4,9 +4,26 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const app = express();
-app.use(cors());
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:3000"}));
+const allowedOrigins = [
+  "http://localhost:3000",   // React local
+  "http://localhost:5173",   // Vite local (if needed)
+  "https://www.ttfholidays.in/",  // Production
+  "https://admin.yourdomain.com" // Admin Panel
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin (like Postman or curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
 // Routes
 const itineraryRoutes = require("./routes/itineraryRoutes");
 app.use("/api/itineraries", itineraryRoutes);
